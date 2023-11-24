@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -21,17 +22,39 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		roadinganimation()
-		// fmt.Println("checking github connection...")
+		var wg sync.WaitGroup
+
+		isgithubconnected := false
+
+		wg.Add(1)
+
+		go roadinganimation(&wg)
+
+		go tryconnecttogithub(&isgithubconnected, &wg)
+
+		wg.Wait()
+
+		if isgithubconnected {
+			fmt.Println("connected to github successfully!")
+		} else {
+			fmt.Println("failed to connect to github!")
+		}
 	},
 }
 
-func roadinganimation() {
+func roadinganimation(wg *sync.WaitGroup) {
 	marks := []string{"   ", ".  ", ".. ", "..."}
 	for i := 0; i < 500; i++ {
 		fmt.Printf("\rconecting to github %s", marks[i%4])
 		time.Sleep(250 * time.Millisecond)
 	}
+	wg.Done()
+}
+
+func tryconnecttogithub(isgithubconnected *bool, wg *sync.WaitGroup) {
+	time.Sleep((3000 * time.Millisecond))
+	*isgithubconnected = true
+	wg.Done()
 }
 
 func init() {
