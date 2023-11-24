@@ -24,17 +24,17 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var wg sync.WaitGroup
 
-		isgithubconnected := false
+		isGithubConnected := false
 
 		wg.Add(1)
 
-		go roadinganimation(&wg)
+		go loadingAnimation(&wg)
 
-		go tryconnecttogithub(&isgithubconnected, &wg)
+		go tryConnectToGithub(&isGithubConnected, &wg)
 
 		wg.Wait()
 
-		if isgithubconnected {
+		if isGithubConnected {
 			fmt.Println("connected to github successfully!")
 		} else {
 			fmt.Println("failed to connect to github!")
@@ -42,7 +42,7 @@ to quickly create a Cobra application.`,
 	},
 }
 
-func roadinganimation(wg *sync.WaitGroup) {
+func loadingAnimation(wg *sync.WaitGroup) {
 	marks := []string{"   ", ".  ", ".. ", "..."}
 	for i := 0; i < 500; i++ {
 		fmt.Printf("\rconecting to github %s", marks[i%4])
@@ -51,9 +51,9 @@ func roadinganimation(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-func tryconnecttogithub(isgithubconnected *bool, wg *sync.WaitGroup) {
+func tryConnectToGithub(isGithubConnected *bool, wg *sync.WaitGroup) {
 	time.Sleep((3000 * time.Millisecond))
-	*isgithubconnected = true
+	*isGithubConnected = true
 	wg.Done()
 }
 
