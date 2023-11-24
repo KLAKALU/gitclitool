@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"os/exec"
 	"sync"
 	"time"
 
@@ -35,9 +36,9 @@ to quickly create a Cobra application.`,
 		wg.Wait()
 
 		if isGithubConnected {
-			fmt.Println("connected to github successfully!")
+			fmt.Println("\nconnected to github successfully!")
 		} else {
-			fmt.Println("failed to connect to github!")
+			fmt.Println("\nfailed to connect to github!")
 		}
 	},
 }
@@ -52,8 +53,14 @@ func loadingAnimation(wg *sync.WaitGroup) {
 }
 
 func tryConnectToGithub(isGithubConnected *bool, wg *sync.WaitGroup) {
-	time.Sleep((3000 * time.Millisecond))
-	*isGithubConnected = true
+	out, err := exec.Command("ssh", "-T", "git@github.com").CombinedOutput()
+	fmt.Printf("\nls result: %s", string(out))
+	//fmt.Printf("\nerr:%s", err)
+	if err.Error() == "exit status 1" {
+		*isGithubConnected = true
+	} else {
+		*isGithubConnected = false
+	}
 	wg.Done()
 }
 
