@@ -25,7 +25,7 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 		config, _ := cmd.Flags().GetBool("config")
-		showMsg, _ := cmd.Flags().GetBool("showmsg")
+		isShowMsgTrue, _ := cmd.Flags().GetBool("showmsg")
 		if config {
 			fmt.Println("config is true")
 		} else {
@@ -46,7 +46,7 @@ to quickly create a Cobra application.`,
 			}
 			fmt.Println("ssh-key directory created")
 		} else {
-			if showMsg {
+			if isShowMsgTrue {
 				fmt.Println("ssh-key directory already exist")
 			}
 		}
@@ -61,7 +61,7 @@ to quickly create a Cobra application.`,
 			}
 			fmt.Println("ssh-keygen success")
 		} else {
-			if showMsg {
+			if isShowMsgTrue {
 				fmt.Println("ssh-key already exist")
 			}
 			os.Exit(1)
