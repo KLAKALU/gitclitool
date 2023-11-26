@@ -61,9 +61,7 @@ to quickly create a Cobra application.`,
 			}
 			fmt.Println("ssh-keygen success")
 		} else {
-			if isShowMsgTrue {
-				fmt.Println("ssh-key already exist")
-			}
+			fmt.Println("ssh-key already exist")
 			os.Exit(1)
 		}
 		//ssh-keyをクリップボードにコピー
