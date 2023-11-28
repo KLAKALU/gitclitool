@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -65,6 +66,24 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 		//ssh-keyをクリップボードにコピー
+		//osの種類を判定
+		osType := runtime.GOOS
+		switch osType {
+		case "darwin":
+			//mac
+			_, err := exec.Command("cat", homedir+directlyName+"/"+sshKeyName+".pub", "|", "pbcopy").CombinedOutput()
+			if err != nil {
+				fmt.Println("ssh-key copy error")
+				os.Exit(1)
+			}
+			fmt.Println("ssh-key copy success")
+		case "linux":
+			//linux
+		case "windows":
+			//windows
+		default:
+			//その他
+		}
 	},
 }
 
