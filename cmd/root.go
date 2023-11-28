@@ -72,7 +72,7 @@ to quickly create a Cobra application.`,
 		}
 		_, out, err := prompt.Run()
 		if err != nil {
-			fmt.Println("Prompt failed %v\n", err)
+			fmt.Printf("Prompt failed %v\n", err)
 			return
 		}
 		fmt.Printf("You choose %s\n", out)
