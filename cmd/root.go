@@ -9,6 +9,8 @@ import (
 	"os/exec"
 	"runtime"
 
+	"github.com/manifoldco/promptui"
+
 	"github.com/spf13/cobra"
 )
 
@@ -63,20 +65,33 @@ to quickly create a Cobra application.`,
 			fmt.Println("ssh-keygen success")
 		} else {
 			fmt.Println("ssh-key already exist")
+		}
+		prompt := promptui.Select{
+			Label: "Select Type",
+			Items: []string{"yes", "no"},
+		}
+		_, out, err := prompt.Run()
+		if err != nil {
+			fmt.Println("Prompt failed %v\n", err)
+			return
+		}
+		fmt.Printf("You choose %s\n", out)
+		if out == "no" {
 			os.Exit(1)
 		}
-		//ssh-keyをクリップボードにコピー
-		//osの種類を判定
+
 		osType := runtime.GOOS
+		//ssh-keyを取得
+		var sshKey []byte
 		switch osType {
 		case "darwin":
 			//mac
-			_, err := exec.Command("cat", homedir+directlyName+"/"+sshKeyName+".pub", "|", "pbcopy").CombinedOutput()
+			var err error
+			sshKey, err = exec.Command("cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
 			}
-			fmt.Println("ssh-key copy success")
 		case "linux":
 			//linux
 		case "windows":
@@ -84,6 +99,23 @@ to quickly create a Cobra application.`,
 		default:
 			//その他
 		}
+		//ssh-keyをクリップボードにコピー
+		switch osType {
+		case "darwin":
+			//mac
+			_, err := exec.Command("osascript", "-e", "set the clipboard to \""+string(sshKey)+"\"").CombinedOutput()
+			if err != nil {
+				fmt.Println("ssh-key copy error")
+				os.Exit(1)
+			}
+		case "linux":
+			//linux
+		case "windows":
+			//windows
+		default:
+			//その他
+		}
+		fmt.Println("ssh-key copy success")
 	},
 }
 
