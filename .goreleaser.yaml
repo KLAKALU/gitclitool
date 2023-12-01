@@ -21,8 +21,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - windows
-    files:
-      - lunch.bat
   - id: linux
     env:
       - CGO_ENABLED=0
@@ -47,6 +45,8 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
+    files:
+      - lunch.bat
   - id: linux
     builds: 
       - linux
