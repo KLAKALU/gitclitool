@@ -16,17 +16,26 @@ before:
     - go generate ./...
 
 builds:
-  - env:
+  - id: windows
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+  - id: linux
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
+  - id: darwin
+    env:
+      - CGO_ENABLED=0
+    goos:
       - darwin
 
 archives:
-  - format: tar.gz
-    # this name template makes the OS and Arch compatible with the results of `uname`.
-    name_template: >-
+  - id: windows
+    - format: zip
+      name_template: >-
       {{ .ProjectName }}_
       {{ .Version }}_
       {{- title .Os }}_
@@ -34,15 +43,29 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    # use zip for windows archives
-    format_overrides:
-      - goos: windows
-        format: zip
-  - files:
-    files_overrides:
-      - goos: windows
-        files:
-          - lunch.bat
+    - files:
+      - lunch.bat
+  - id: linux
+    - format: tar.gz
+      name_template: >-
+      {{ .ProjectName }}_
+      {{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+  - id: darwin
+    - format: tar.gz
+      name_template: >-
+      {{ .ProjectName }}_
+      {{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+
 
 
 changelog:
