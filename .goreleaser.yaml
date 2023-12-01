@@ -19,18 +19,15 @@ builds:
   - id: windows
     env:
       - CGO_ENABLED=0
-    goos:
-      - windows
+    goos: windows
   - id: linux
     env:
       - CGO_ENABLED=0
-    goos:
-      - linux
+    goos: linux
   - id: darwin
     env:
       - CGO_ENABLED=0
-    goos:
-      - darwin
+    goos: darwin
 
 archives:
   - id: windows
