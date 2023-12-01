@@ -38,6 +38,12 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+  - files:
+    files_overrides:
+      - goos: windows
+        files:
+          - lunch.bat
+
 
 changelog:
   sort: asc
