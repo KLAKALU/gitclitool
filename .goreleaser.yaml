@@ -19,21 +19,25 @@ builds:
   - id: windows
     env:
       - CGO_ENABLED=0
-    goos: windows
+    goos:
+      - windows
   - id: linux
     env:
       - CGO_ENABLED=0
-    goos: linux
+    goos:
+      - linux
   - id: darwin
     env:
       - CGO_ENABLED=0
-    goos: darwin
+    goos:
+      - darwin
 
 archives:
   - id: windows
-    build: windows
-    - format: zip
-      name_template: >-
+    builds: 
+      - windows
+    format: zip
+    name_template: >-
       {{ .ProjectName }}_
       {{ .Version }}_
       {{- title .Os }}_
@@ -41,12 +45,11 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    - files:
-      - lunch.bat
   - id: linux
-    build: linux
-    - format: tar.gz
-      name_template: >-
+    builds: 
+      - linux
+    format: tar.gz
+    name_template: >-
       {{ .ProjectName }}_
       {{ .Version }}_
       {{- title .Os }}_
@@ -55,9 +58,10 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
   - id: darwin
-    build: darwin
-    - format: tar.gz
-      name_template: >-
+    builds: 
+      - darwin
+    format: tar.gz
+    name_template: >-
       {{ .ProjectName }}_
       {{ .Version }}_
       {{- title .Os }}_
@@ -65,7 +69,6 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-
 
 
 changelog:
