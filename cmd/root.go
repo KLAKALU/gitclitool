@@ -64,7 +64,7 @@ to quickly create a Cobra application.`,
 			fmt.Println("ssh-key already exist")
 		}
 		prompt := promptui.Select{
-			Label: "Select Type",
+			Label: "Copy ssh-key to clipboard?",
 			Items: []string{"yes", "no"},
 		}
 		_, out, err := prompt.Run()
@@ -94,7 +94,8 @@ to quickly create a Cobra application.`,
 			fmt.Println("sorry, linux is not supported yet")
 		case "windows":
 			//windows
-			_, err := exec.Command("powershell", "cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
+			var err error
+			sshKey, err = exec.Command("powershell", "cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
@@ -102,7 +103,9 @@ to quickly create a Cobra application.`,
 		default:
 			//その他
 			fmt.Print("sorry, this os is not supported yet")
+			os.Exit(1)
 		}
+		fmt.Println("ssh-key get success")
 		//ssh-keyをクリップボードにコピー
 		switch osType {
 		case "darwin":
@@ -125,6 +128,7 @@ to quickly create a Cobra application.`,
 			}
 		default:
 			fmt.Print("sorry, this os is not supported yet")
+			os.Exit(1)
 			//その他
 		}
 		fmt.Println("ssh-key copy success")
