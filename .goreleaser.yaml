@@ -21,6 +21,8 @@ builds:
       - CGO_ENABLED=0
     goos:
       - windows
+    files:
+      - lunch.bat
   - id: linux
     env:
       - CGO_ENABLED=0
