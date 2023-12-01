@@ -34,6 +34,7 @@ builds:
 
 archives:
   - id: windows
+    build: windows
     - format: zip
       name_template: >-
       {{ .ProjectName }}_
@@ -46,6 +47,7 @@ archives:
     - files:
       - lunch.bat
   - id: linux
+    build: linux
     - format: tar.gz
       name_template: >-
       {{ .ProjectName }}_
@@ -56,6 +58,7 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
   - id: darwin
+    build: darwin
     - format: tar.gz
       name_template: >-
       {{ .ProjectName }}_
