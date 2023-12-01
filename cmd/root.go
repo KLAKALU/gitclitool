@@ -91,10 +91,17 @@ to quickly create a Cobra application.`,
 			}
 		case "linux":
 			//linux
+			fmt.Println("sorry, linux is not supported yet")
 		case "windows":
 			//windows
+			_, err := exec.Command("powershell", "cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
+			if err != nil {
+				fmt.Println("ssh-key copy error")
+				os.Exit(1)
+			}
 		default:
 			//その他
+			fmt.Print("sorry, this os is not supported yet")
 		}
 		//ssh-keyをクリップボードにコピー
 		switch osType {
@@ -107,9 +114,17 @@ to quickly create a Cobra application.`,
 			}
 		case "linux":
 			//linux
+			fmt.Print("sorry, linux is not supported yet")
+			os.Exit(1)
 		case "windows":
 			//windows
+			_, err := exec.Command("powershell", string(sshKey), "|", "clip").CombinedOutput()
+			if err != nil {
+				fmt.Println("ssh-key copy error")
+				os.Exit(1)
+			}
 		default:
+			fmt.Print("sorry, this os is not supported yet")
 			//その他
 		}
 		fmt.Println("ssh-key copy success")
