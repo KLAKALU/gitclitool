@@ -121,7 +121,7 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		case "windows":
 			//windows
-			_, err := exec.Command("powershell", string(sshKey), "|", "clip").CombinedOutput()
+			_, err := exec.Command("powershell", "\"", string(sshKey), "\"", "|", "clip").CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
