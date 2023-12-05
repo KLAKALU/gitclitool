@@ -122,8 +122,11 @@ to quickly create a Cobra application.`,
 			}
 		case "linux":
 			//linux
-			fmt.Print("sorry, linux is not supported yet")
-			os.Exit(1)
+			_, err := exec.Command("xclip", "-selection", "c", "-i").CombinedOutput()
+			if err != nil {
+				fmt.Println("ssh-key copy error")
+				os.Exit(1)
+			}
 		case "windows":
 			//windows
 			_, err := exec.Command("powershell", "\"", string(sshKey), "\"", "|", "clip").CombinedOutput()
