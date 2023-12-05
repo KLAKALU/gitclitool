@@ -91,7 +91,12 @@ to quickly create a Cobra application.`,
 			}
 		case "linux":
 			//linux
-			fmt.Println("sorry, linux is not supported yet")
+			var err error
+			sshKey, err = exec.Command("cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
+			if err != nil {
+				fmt.Println("ssh-key copy error")
+				os.Exit(1)
+			}
 		case "windows":
 			//windows
 			var err error
