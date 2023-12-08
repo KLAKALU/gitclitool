@@ -24,6 +24,16 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		prompt := promptui.Select{
+			Label: "what do you want to do?",
+			Items: []string{"check", "ssh-key create"},
+		}
+		_, out, err := prompt.Run()
+		if err != nil {
+			fmt.Printf("Prompt failed %v\n", err)
+			return
+		}
+		fmt.Printf("%s\n", out)
 		config, _ := cmd.Flags().GetBool("config")
 		isShowMsgTrue, _ := cmd.Flags().GetBool("showmsg")
 		if config {
@@ -63,11 +73,11 @@ to quickly create a Cobra application.`,
 		} else {
 			fmt.Println("ssh-key already exist")
 		}
-		prompt := promptui.Select{
+		prompt2 := promptui.Select{
 			Label: "Copy ssh-key to clipboard?",
 			Items: []string{"yes", "no"},
 		}
-		_, out, err := prompt.Run()
+		_, out, err = prompt2.Run()
 		if err != nil {
 			fmt.Printf("Prompt failed %v\n", err)
 			return
@@ -122,11 +132,13 @@ to quickly create a Cobra application.`,
 			}
 		case "linux":
 			//linux
-			_, err := exec.Command("xclip", "-selection", "c", "-i").CombinedOutput()
-			if err != nil {
-				fmt.Println("ssh-key copy error")
-				os.Exit(1)
-			}
+			/*
+				_, err := exec.Command("xclip", "-selection", "c", "-i").CombinedOutput()
+				if err != nil {
+					fmt.Println("ssh-key copy error")
+					os.Exit(1)
+				}
+			*/
 		case "windows":
 			//windows
 			_, err := exec.Command("powershell", "\"", string(sshKey), "\"", "|", "clip").CombinedOutput()
