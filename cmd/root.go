@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 
 	"github.com/manifoldco/promptui"
@@ -47,10 +48,10 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		directlyName := "/.ssh"
-		if _, err := os.Stat(homedir + directlyName); os.IsNotExist(err) {
+		distDir := ".ssh"
+		if _, err := os.Stat(filepath.Join(homedir, distDir)); os.IsNotExist(err) {
 			// ~/.ssh directory not exist
-			if err := os.Mkdir(homedir+directlyName, 0755); err != nil {
+			if err := os.Mkdir(filepath.Join(homedir, distDir), 0755); err != nil {
 				fmt.Println("ssh-key directory create error")
 				os.Exit(1)
 			}
@@ -60,10 +61,10 @@ to quickly create a Cobra application.`,
 				fmt.Println("ssh-key directory already exist")
 			}
 		}
-		sshKeyName := "id_rsa"
-		if _, err := os.Stat(homedir + directlyName + "/" + sshKeyName); os.IsNotExist(err) {
+		sshKeyName := "id_rsa.pub"
+		if _, err := os.Stat(filepath.Join(homedir, distDir, sshKeyName)); os.IsNotExist(err) {
 			// ~/.ssh/id_rsa file not exist
-			out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", homedir+directlyName+"/"+sshKeyName).CombinedOutput()
+			out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
 			fmt.Printf("\nssh-keygen result: %s", string(out))
 			if err != nil {
 				fmt.Println("ssh-keygen error")
@@ -94,7 +95,7 @@ to quickly create a Cobra application.`,
 		case "darwin":
 			//mac
 			var err error
-			sshKey, err = exec.Command("cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
+			sshKey, err = exec.Command("cat", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
@@ -102,7 +103,7 @@ to quickly create a Cobra application.`,
 		case "linux":
 			//linux
 			var err error
-			sshKey, err = exec.Command("cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
+			sshKey, err = exec.Command("cat", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
@@ -110,7 +111,7 @@ to quickly create a Cobra application.`,
 		case "windows":
 			//windows
 			var err error
-			sshKey, err = exec.Command("powershell", "cat", homedir+directlyName+"/"+sshKeyName+".pub").CombinedOutput()
+			sshKey, err = exec.Command("powershell", "cat", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
