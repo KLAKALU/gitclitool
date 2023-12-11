@@ -25,6 +25,10 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		distDir := ".ssh"
+
+		sshKeyName := "id_rsa.pub"
+
 		prompt := promptui.Select{
 			Label: "what do you want to do?",
 			Items: []string{"check", "ssh-key create"},
@@ -48,7 +52,6 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		distDir := ".ssh"
 		if _, err := os.Stat(filepath.Join(homedir, distDir)); os.IsNotExist(err) {
 			// ~/.ssh directory not exist
 			if err := os.Mkdir(filepath.Join(homedir, distDir), 0755); err != nil {
@@ -61,7 +64,7 @@ to quickly create a Cobra application.`,
 				fmt.Println("ssh-key directory already exist")
 			}
 		}
-		sshKeyName := "id_rsa.pub"
+
 		if _, err := os.Stat(filepath.Join(homedir, distDir, sshKeyName)); os.IsNotExist(err) {
 			// ~/.ssh/id_rsa file not exist
 			out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
