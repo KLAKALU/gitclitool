@@ -47,6 +47,8 @@ to quickly create a Cobra application.`,
 			fmt.Println("config is false")
 
 		}
+
+		// check ssh directory exist
 		homedir, err := os.UserHomeDir()
 		if err != nil {
 			fmt.Println(err)
@@ -65,6 +67,7 @@ to quickly create a Cobra application.`,
 			}
 		}
 
+		// check ssh-key exist
 		if _, err := os.Stat(filepath.Join(homedir, distDir, sshKeyName)); os.IsNotExist(err) {
 			// ~/.ssh/id_rsa file not exist
 			out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
@@ -92,7 +95,7 @@ to quickly create a Cobra application.`,
 		}
 
 		osType := runtime.GOOS
-		//ssh-keyを取得
+		//get ssh-key value
 		var sshKey []byte
 		switch osType {
 		case "darwin":
@@ -125,7 +128,7 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 		fmt.Println("ssh-key get success")
-		//ssh-keyをクリップボードにコピー
+		//copy ssh-key to clipboard
 		switch osType {
 		case "darwin":
 			//mac
