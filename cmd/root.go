@@ -36,6 +36,8 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			os.Exit(1)
 		}
+
+		// ask what to do
 		prompt := promptui.Select{
 			Label: "what do you want to do?",
 			Items: []string{"check", "ssh-key create"},
@@ -129,6 +131,7 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 		fmt.Println("ssh-key get success")
+
 		//copy ssh-key to clipboard
 		switch OS_TYPE {
 		case "darwin":
