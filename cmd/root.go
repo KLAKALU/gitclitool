@@ -25,10 +25,17 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		distDir := ".ssh"
+		const DIST_DIR = ".ssh"
 
-		sshKeyName := "id_rsa.pub"
+		const SSH_KEY_NAME = "id_rsa.pub"
 
+		const OS_TYPE = runtime.GOOS
+
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		prompt := promptui.Select{
 			Label: "what do you want to do?",
 			Items: []string{"check", "ssh-key create"},
@@ -49,14 +56,9 @@ to quickly create a Cobra application.`,
 		}
 
 		// check ssh directory exist
-		homedir, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		if _, err := os.Stat(filepath.Join(homedir, distDir)); os.IsNotExist(err) {
+		if _, err := os.Stat(filepath.Join(homeDir, DIST_DIR)); os.IsNotExist(err) {
 			// ~/.ssh directory not exist
-			if err := os.Mkdir(filepath.Join(homedir, distDir), 0755); err != nil {
+			if err := os.Mkdir(filepath.Join(homeDir, DIST_DIR), 0755); err != nil {
 				fmt.Println("ssh-key directory create error")
 				os.Exit(1)
 			}
@@ -68,9 +70,9 @@ to quickly create a Cobra application.`,
 		}
 
 		// check ssh-key exist
-		if _, err := os.Stat(filepath.Join(homedir, distDir, sshKeyName)); os.IsNotExist(err) {
+		if _, err := os.Stat(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)); os.IsNotExist(err) {
 			// ~/.ssh/id_rsa file not exist
-			out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
+			out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
 			fmt.Printf("\nssh-keygen result: %s", string(out))
 			if err != nil {
 				fmt.Println("ssh-keygen error")
@@ -94,14 +96,13 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 
-		osType := runtime.GOOS
 		//get ssh-key value
 		var sshKey []byte
-		switch osType {
+		switch OS_TYPE {
 		case "darwin":
 			//mac
 			var err error
-			sshKey, err = exec.Command("cat", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
+			sshKey, err = exec.Command("cat", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
@@ -109,7 +110,7 @@ to quickly create a Cobra application.`,
 		case "linux":
 			//linux
 			var err error
-			sshKey, err = exec.Command("cat", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
+			sshKey, err = exec.Command("cat", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
@@ -117,7 +118,7 @@ to quickly create a Cobra application.`,
 		case "windows":
 			//windows
 			var err error
-			sshKey, err = exec.Command("powershell", "cat", filepath.Join(homedir, distDir, sshKeyName)).CombinedOutput()
+			sshKey, err = exec.Command("powershell", "cat", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
 			if err != nil {
 				fmt.Println("ssh-key copy error")
 				os.Exit(1)
@@ -129,7 +130,7 @@ to quickly create a Cobra application.`,
 		}
 		fmt.Println("ssh-key get success")
 		//copy ssh-key to clipboard
-		switch osType {
+		switch OS_TYPE {
 		case "darwin":
 			//mac
 			_, err := exec.Command("osascript", "-e", "set the clipboard to \""+string(sshKey)+"\"").CombinedOutput()
