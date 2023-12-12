@@ -44,11 +44,13 @@ to quickly create a Cobra application.`,
 			fmt.Printf("Prompt failed %v\n", err)
 			return
 		}
-		fmt.Printf("%s\n", out)
-		if out == "ssh-key create" {
+		if out == "check" {
+			// check
+		} else if out == "ssh-key create" {
+			// ssh-key create
 			create_ssh_key.CreateSshKey(OS_TYPE, isShowMsgTrue)
+			jump_to_settingpage.JumpToSettingPage(OS_TYPE)
 		}
-		jump_to_settingpage.JumpToSettingPage(OS_TYPE)
 	},
 }
 
