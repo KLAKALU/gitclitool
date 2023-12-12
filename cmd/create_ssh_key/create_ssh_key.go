@@ -5,17 +5,14 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 
 	"github.com/manifoldco/promptui"
 )
 
-func CreateSshKey(isShowMsgTrue bool) {
+func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
 	const DIST_DIR = ".ssh"
 
 	const SSH_KEY_NAME = "id_rsa.pub"
-
-	const OS_TYPE = runtime.GOOS
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {

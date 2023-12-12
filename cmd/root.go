@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/KLAKALU/gitclitool/cmd/create_ssh_key"
 	"github.com/manifoldco/promptui"
@@ -30,6 +31,8 @@ to quickly create a Cobra application.`,
 			fmt.Println("config is false")
 		}
 
+		const OS_TYPE = runtime.GOOS
+
 		// ask what to do
 		prompt := promptui.Select{
 			Label: "what do you want to do?",
@@ -41,8 +44,10 @@ to quickly create a Cobra application.`,
 			return
 		}
 		fmt.Printf("%s\n", out)
+		if out == "ssh-key create" {
+			create_ssh_key.CreateSshKey(OS_TYPE, isShowMsgTrue)
+		}
 
-		create_ssh_key.CreateSshKey(isShowMsgTrue)
 	},
 }
 
