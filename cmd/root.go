@@ -9,7 +9,7 @@ import (
 	"runtime"
 
 	"github.com/KLAKALU/gitclitool/cmd/create_ssh_key"
-	"github.com/KLAKALU/gitclitool/jump_to_settingpage"
+	"github.com/KLAKALU/gitclitool/cmd/jump_to_settingpage"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
