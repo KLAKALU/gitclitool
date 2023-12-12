@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/KLAKALU/gitclitool/cmd/create_ssh_key"
+	"github.com/KLAKALU/gitclitool/jump_to_settingpage"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
@@ -47,7 +48,7 @@ to quickly create a Cobra application.`,
 		if out == "ssh-key create" {
 			create_ssh_key.CreateSshKey(OS_TYPE, isShowMsgTrue)
 		}
-
+		jump_to_settingpage.JumpToSettingPage(OS_TYPE)
 	},
 }
 
