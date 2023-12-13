@@ -16,17 +16,26 @@ before:
     - go generate ./...
 
 builds:
-  - env:
+  - id: windows
+    env:
       - CGO_ENABLED=0
     goos:
       - windows
+  - id: linux
+    env:
+      - CGO_ENABLED=0
+    goos:
       - linux
+  - id: darwin
+    env:
+      - CGO_ENABLED=0
+    goos:
       - darwin
 
 archives:
   - id: windows
     builds: 
-      - default
+      - windows
     format: zip
     name_template: >-
       {{ .ProjectName }}_
@@ -40,7 +49,7 @@ archives:
       - lunch.bat
   - id: linux
     builds: 
-      - default
+      - linux
     format: tar.gz
     name_template: >-
       {{ .ProjectName }}_
@@ -52,7 +61,7 @@ archives:
       {{- if .Arm }}v{{ .Arm }}{{ end }}
   - id: darwin
     builds: 
-      - default
+      - darwin
     format: tar.gz
     name_template: >-
       {{ .ProjectName }}_
