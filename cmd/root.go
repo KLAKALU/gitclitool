@@ -44,9 +44,10 @@ to quickly create a Cobra application.`,
 			fmt.Printf("Prompt failed %v\n", err)
 			return
 		}
-		if out == "check" {
-			// check
-		} else if out == "ssh-key create" {
+		switch out {
+		case "check":
+		// check
+		case "ssh-key create":
 			// ssh-key create
 			create_ssh_key.CreateSshKey(OS_TYPE, isShowMsgTrue)
 			prompt := promptui.Select{
