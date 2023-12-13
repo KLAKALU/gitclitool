@@ -49,6 +49,19 @@ to quickly create a Cobra application.`,
 		} else if out == "ssh-key create" {
 			// ssh-key create
 			create_ssh_key.CreateSshKey(OS_TYPE, isShowMsgTrue)
+			prompt := promptui.Select{
+				Label: "Open setting page?",
+				Items: []string{"yes", "no"},
+			}
+			_, out, err := prompt.Run()
+			if err != nil {
+				fmt.Printf("Prompt failed %v\n", err)
+				return
+			}
+			fmt.Printf("You choose %s\n", out)
+			if out == "no" {
+				return
+			}
 			jump_to_settingpage.JumpToSettingPage(OS_TYPE)
 		}
 	},
