@@ -58,7 +58,7 @@ func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
 	}
 	fmt.Printf("You choose %s\n", out)
 	if out == "no" {
-		os.Exit(1)
+		return
 	}
 
 	//get ssh-key value
