@@ -62,36 +62,10 @@ func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
 	}
 
 	//get ssh-key value
-	var sshKey []byte
-	switch OS_TYPE {
-	case "darwin":
-		//mac
-		var err error
-		sshKey, err = exec.Command("cat", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
-		if err != nil {
-			fmt.Println("ssh-key copy error")
-			os.Exit(1)
-		}
-	case "linux":
-		//linux
-		var err error
-		sshKey, err = exec.Command("cat", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
-		if err != nil {
-			fmt.Println("ssh-key copy error")
-			os.Exit(1)
-		}
-	case "windows":
-		//windows
-		var err error
-		sshKey, err = exec.Command("powershell", "cat", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
-		if err != nil {
-			fmt.Println("ssh-key copy error")
-			os.Exit(1)
-		}
-	default:
-		//その他
-		fmt.Print("sorry, this os is not supported yet")
-		os.Exit(1)
+	//var sshKey []byte
+	sshKey, err := os.ReadFile(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME))
+	if err != nil {
+		panic(err)
 	}
 	fmt.Println("ssh-key get success")
 
