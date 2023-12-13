@@ -42,7 +42,7 @@ to quickly create a Cobra application.`,
 		_, out, err := prompt.Run()
 		if err != nil {
 			fmt.Printf("Prompt failed %v\n", err)
-			return
+			os.Exit(1)
 		}
 		switch out {
 		case "check":
@@ -57,11 +57,11 @@ to quickly create a Cobra application.`,
 			_, out, err := prompt.Run()
 			if err != nil {
 				fmt.Printf("Prompt failed %v\n", err)
-				return
+				os.Exit(1)
 			}
 			fmt.Printf("You choose %s\n", out)
 			if out == "no" {
-				return
+				os.Exit(0)
 			}
 			jump_to_settingpage.JumpToSettingPage(OS_TYPE)
 		}
