@@ -9,7 +9,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
+func CreateSshKey(OS_TYPE string) {
 	const DIST_DIR = ".ssh"
 
 	const SSH_KEY_NAME = "id_rsa"
@@ -28,10 +28,6 @@ func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
 			os.Exit(1)
 		}
 		fmt.Println("ssh-key directory created")
-	} else {
-		if isShowMsgTrue {
-			fmt.Println("ssh-key directory already exist")
-		}
 	}
 
 	// check ssh-key exist

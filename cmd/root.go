@@ -24,14 +24,6 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config, _ := cmd.Flags().GetBool("config")
-		isShowMsgTrue, _ := cmd.Flags().GetBool("showmsg")
-		if config {
-			fmt.Println("config is true")
-		} else {
-			fmt.Println("config is false")
-		}
-
 		const OS_TYPE = runtime.GOOS
 
 		// ask what to do
@@ -49,7 +41,7 @@ to quickly create a Cobra application.`,
 		// check
 		case "ssh-key create":
 			// ssh-key create
-			create_ssh_key.CreateSshKey(OS_TYPE, isShowMsgTrue)
+			create_ssh_key.CreateSshKey(OS_TYPE)
 			prompt := promptui.Select{
 				Label: "Open setting page?",
 				Items: []string{"yes", "no"},
@@ -76,7 +68,4 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	rootCmd.PersistentFlags().BoolP("config", "c", false, "congiure")
-	rootCmd.PersistentFlags().BoolP("showmsg", "s", false, "show message")
 }
