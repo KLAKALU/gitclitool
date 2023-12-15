@@ -12,7 +12,7 @@ import (
 func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
 	const DIST_DIR = ".ssh"
 
-	const SSH_KEY_NAME = "id_rsa.pub"
+	const SSH_KEY_NAME = "id_rsa"
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -63,7 +63,7 @@ func CreateSshKey(OS_TYPE string, isShowMsgTrue bool) {
 
 	//get ssh-key value
 	//var sshKey []byte
-	sshKey, err := os.ReadFile(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME))
+	sshKey, err := os.ReadFile(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME+".pub"))
 	if err != nil {
 		panic(err)
 	}
