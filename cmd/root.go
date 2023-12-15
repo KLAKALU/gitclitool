@@ -38,10 +38,13 @@ to quickly create a Cobra application.`,
 		}
 		switch out {
 		case "check":
-		// check
+			// check
 		case "ssh-key create":
 			// ssh-key create
+
 			create_ssh_key.CreateSshKey(OS_TYPE)
+
+			// ask open setting page
 			prompt := promptui.Select{
 				Label: "Open setting page?",
 				Items: []string{"yes", "no"},

@@ -43,6 +43,8 @@ func CreateSshKey(OS_TYPE string) {
 	} else {
 		fmt.Println("ssh-key already exist")
 	}
+
+	// ask copy ssh-key to clipboard
 	prompt := promptui.Select{
 		Label: "Copy ssh-key to clipboard?",
 		Items: []string{"yes", "no"},
@@ -58,7 +60,6 @@ func CreateSshKey(OS_TYPE string) {
 	}
 
 	//get ssh-key value
-	//var sshKey []byte
 	sshKey, err := os.ReadFile(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME+".pub"))
 	if err != nil {
 		panic(err)

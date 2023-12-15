@@ -9,6 +9,7 @@ import (
 func JumpToSettingPage(OS_TYPE string) {
 	const SETTING_PAGE_URL = "https://github.com/settings/ssh/new"
 
+	// open setting page
 	switch OS_TYPE {
 	case "darwin":
 		_, err := exec.Command("open", SETTING_PAGE_URL).CombinedOutput()
