@@ -8,11 +8,15 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/KLAKALU/gitclitool/cmd/create_ssh_key"
-	"github.com/KLAKALU/gitclitool/cmd/jump_to_settingpage"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
+
+type FileDirectory struct {
+	homeDir    string
+	distDir    string
+	sshKeyName string
+}
 
 var rootCmd = &cobra.Command{
 	Use:   "gitclitool",
@@ -26,15 +30,18 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		const OS_TYPE = runtime.GOOS
 
-		const DIST_DIR = ".ssh"
+		var fileDir FileDirectory
 
-		const SSH_KEY_NAME = "id_rsa"
+		var err error
 
-		homeDir, err := os.UserHomeDir()
+		fileDir.homeDir, err = os.UserHomeDir()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+		fileDir.distDir = ".ssh"
+
+		fileDir.sshKeyName = "id_rsa"
 
 		// ask what to do
 		prompt := promptui.Select{
@@ -49,11 +56,11 @@ to quickly create a Cobra application.`,
 		switch out {
 		case "check":
 			// check
-			try_login_github(DIST_DIR, SSH_KEY_NAME, homeDir)
+			try_login_github(fileDir)
 		case "ssh-key create":
 			// ssh-key create
 
-			create_ssh_key.CreateSshKey(OS_TYPE, DIST_DIR, SSH_KEY_NAME, homeDir)
+			CreateSshKey(OS_TYPE, fileDir)
 
 			// ask open setting page
 			prompt := promptui.Select{
@@ -69,7 +76,7 @@ to quickly create a Cobra application.`,
 			if out == "no" {
 				os.Exit(0)
 			}
-			jump_to_settingpage.JumpToSettingPage(OS_TYPE)
+			JumpToSettingPage(OS_TYPE)
 		}
 	},
 }

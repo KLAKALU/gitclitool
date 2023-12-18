@@ -1,4 +1,4 @@
-package create_ssh_key
+package cmd
 
 import (
 	"fmt"
@@ -9,12 +9,12 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func CreateSshKey(OS_TYPE string, DIST_DIR string, SSH_KEY_NAME string, homeDir string) {
+func CreateSshKey(OS_TYPE string, fileDir FileDirectory) {
 
 	// check ssh directory exist
-	if _, err := os.Stat(filepath.Join(homeDir, DIST_DIR)); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(fileDir.homeDir, fileDir.distDir)); os.IsNotExist(err) {
 		// ~/.ssh directory not exist
-		if err := os.Mkdir(filepath.Join(homeDir, DIST_DIR), 0755); err != nil {
+		if err := os.Mkdir(filepath.Join(fileDir.homeDir, fileDir.distDir), 0755); err != nil {
 			fmt.Println("ssh-key directory create error")
 			os.Exit(1)
 		}
@@ -22,9 +22,9 @@ func CreateSshKey(OS_TYPE string, DIST_DIR string, SSH_KEY_NAME string, homeDir 
 	}
 
 	// check ssh-key exist
-	if _, err := os.Stat(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(fileDir.homeDir, fileDir.distDir, fileDir.sshKeyName)); os.IsNotExist(err) {
 		// ~/.ssh/id_rsa file not exist
-		out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME)).CombinedOutput()
+		out, err := exec.Command("ssh-keygen", "-t", "ed25519", "-N", "", "-f", filepath.Join(fileDir.homeDir, fileDir.distDir, fileDir.sshKeyName)).CombinedOutput()
 		fmt.Printf("\nssh-keygen result: %s", string(out))
 		if err != nil {
 			fmt.Println("ssh-keygen error")
@@ -51,7 +51,7 @@ func CreateSshKey(OS_TYPE string, DIST_DIR string, SSH_KEY_NAME string, homeDir 
 	}
 
 	//get ssh-key value
-	sshKey, err := os.ReadFile(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME+".pub"))
+	sshKey, err := os.ReadFile(filepath.Join(fileDir.homeDir, fileDir.distDir, fileDir.sshKeyName+".pub"))
 	if err != nil {
 		panic(err)
 	}

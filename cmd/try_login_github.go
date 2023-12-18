@@ -8,13 +8,13 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-func try_login_github(DIST_DIR string, SSH_KEY_NAME string, homeDir string) {
+func try_login_github(fileDir FileDirectory) {
 
 	const USER = "git"
 
 	const HOST = "github.com"
 
-	key, err := os.ReadFile(filepath.Join(homeDir, DIST_DIR, SSH_KEY_NAME))
+	key, err := os.ReadFile(filepath.Join(fileDir.homeDir, fileDir.distDir, fileDir.sshKeyName))
 	if err != nil {
 		fmt.Println("failed to read private key")
 		os.Exit(1)

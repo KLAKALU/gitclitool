@@ -1,4 +1,4 @@
-package jump_to_settingpage
+package cmd
 
 import (
 	"fmt"
