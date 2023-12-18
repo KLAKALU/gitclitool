@@ -1,46 +1,31 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
-
-	"github.com/spf13/cobra"
 )
 
-// checkCmd represents the check command
-var checkCmd = &cobra.Command{
-	Use:   "check",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+func checkGithubConnection(fileDir FileDirectory) {
+	//var wg sync.WaitGroup
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		var wg sync.WaitGroup
+	knownHostsCheck(fileDir)
 
-		isGithubConnected := false
+	//wg.Add(1)
 
-		wg.Add(1)
+	//go loadingAnimation(&wg)
 
-		go loadingAnimation(&wg)
+	//go try_login_github(fileDir, &wg)
 
-		go tryConnectToGithub(&isGithubConnected, &wg)
+	//wg.Wait()
 
-		wg.Wait()
+	gettingGithubUserName()
 
-		if isGithubConnected {
-			fmt.Println("\nconnected to github successfully!")
-		} else {
-			fmt.Println("\nfailed to connect to github!")
-		}
-	},
+	fmt.Println("login to github success!")
 }
 
 func loadingAnimation(wg *sync.WaitGroup) {
@@ -52,17 +37,46 @@ func loadingAnimation(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-func tryConnectToGithub(isGithubConnected *bool, wg *sync.WaitGroup) {
-	out, err := exec.Command("ssh", "-T", "git@github.com").CombinedOutput()
-	fmt.Printf("\nls result: %s", string(out))
-	if err.Error() == "exit status 1" {
-		*isGithubConnected = true
+func knownHostsCheck(fileDir FileDirectory) {
+	// check known_hosts exist
+	if _, err := os.Stat(filepath.Join(fileDir.homeDir, fileDir.distDir, "known_hosts")); os.IsNotExist(err) {
+		// ~/.ssh/known_hosts file not exist
+		makeKnownHosts(fileDir)
 	} else {
-		*isGithubConnected = false
+		// ~/.ssh/known_hosts file exist
+		return
 	}
-	wg.Done()
 }
 
-func init() {
-	rootCmd.AddCommand(checkCmd)
+func makeKnownHosts(fileDir FileDirectory) {
+	out, err := exec.Command("ssh-keyscan", "github.com").CombinedOutput()
+	if err != nil {
+		fmt.Println("failed to make known_hosts list")
+		os.Exit(1)
+	}
+	f, err := os.Create(filepath.Join(fileDir.homeDir, fileDir.distDir, "known_hosts"))
+	if err != nil {
+		fmt.Println("failed to make known_hosts file")
+		os.Exit(1)
+	}
+	defer f.Close()
+	f.Write(out)
+	fmt.Println("known_hosts created")
+}
+
+func gettingGithubUserName() {
+	out, err := exec.Command("ssh", "-T", "git@github.com").CombinedOutput()
+	if err != nil {
+		if out != nil {
+			string := string(out)
+			strList := strings.Split(string, " ")
+			userName := strList[1]
+			userName = strings.Replace(userName, "!", "", 1)
+			fmt.Println("github username: " + userName)
+		} else {
+			fmt.Println("failed to get github username")
+		}
+	} else {
+		fmt.Println("failed to get github username")
+	}
 }

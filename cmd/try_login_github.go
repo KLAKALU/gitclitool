@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"golang.org/x/crypto/ssh"
 )
 
-func try_login_github(fileDir FileDirectory) {
+func try_login_github(fileDir FileDirectory, wg *sync.WaitGroup) {
 
 	const USER = "git"
 
@@ -41,4 +42,5 @@ func try_login_github(fileDir FileDirectory) {
 	}
 
 	fmt.Println("Connected to GitHub")
+	wg.Done()
 }
