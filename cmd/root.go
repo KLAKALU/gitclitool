@@ -49,6 +49,7 @@ to quickly create a Cobra application.`,
 		switch out {
 		case "check":
 			// check
+			try_login_github(DIST_DIR, SSH_KEY_NAME, homeDir)
 		case "ssh-key create":
 			// ssh-key create
 
