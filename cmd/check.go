@@ -70,6 +70,10 @@ func gettingGithubUserName() {
 		if out != nil {
 			string := string(out)
 			strList := strings.Split(string, " ")
+			if strList[0] == "git@github.com:" {
+				fmt.Println("failed to connect to github")
+				os.Exit(1)
+			}
 			userName := strList[1]
 			userName = strings.Replace(userName, "!", "", 1)
 			fmt.Println("github username: " + userName)
