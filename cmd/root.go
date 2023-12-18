@@ -26,6 +26,16 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		const OS_TYPE = runtime.GOOS
 
+		const DIST_DIR = ".ssh"
+
+		const SSH_KEY_NAME = "id_rsa"
+
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 		// ask what to do
 		prompt := promptui.Select{
 			Label: "what do you want to do?",
@@ -42,7 +52,7 @@ to quickly create a Cobra application.`,
 		case "ssh-key create":
 			// ssh-key create
 
-			create_ssh_key.CreateSshKey(OS_TYPE)
+			create_ssh_key.CreateSshKey(OS_TYPE, DIST_DIR, SSH_KEY_NAME, homeDir)
 
 			// ask open setting page
 			prompt := promptui.Select{
