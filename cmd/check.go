@@ -72,6 +72,11 @@ func gettingGithubUserName() {
 				fmt.Println("failed to connect to github")
 				os.Exit(1)
 			}
+			if strList[0] == "ssh:" {
+				fmt.Println("failed to connect to github")
+				fmt.Println("please check network")
+				os.Exit(1)
+			}
 			userName := strList[1]
 			userName = strings.Replace(userName, "!", "", 1)
 			fmt.Println("github username: " + userName)
