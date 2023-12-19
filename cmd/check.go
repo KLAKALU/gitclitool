@@ -19,8 +19,6 @@ func checkGithubConnection(fileDir FileDirectory) {
 
 	//go loadingAnimation(&wg)
 
-	//go try_login_github(fileDir, &wg)
-
 	//wg.Wait()
 
 	gettingGithubUserName()
