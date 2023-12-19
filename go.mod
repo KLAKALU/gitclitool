@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/spf13/cobra v1.8.0
-	golang.org/x/crypto v0.16.0
 )
 
 require (
