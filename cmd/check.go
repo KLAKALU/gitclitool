@@ -11,17 +11,20 @@ import (
 )
 
 func checkGithubConnection(fileDir FileDirectory) {
-	//var wg sync.WaitGroup
 
-	knownHostsCheck(fileDir)
+	// sshでぃれくとりが存在するか確認
+
+	//var wg sync.WaitGroup
 
 	//wg.Add(1)
 
 	//go loadingAnimation(&wg)
 
-	//wg.Wait()
+	knownHostsCheck(fileDir)
 
 	gettingGithubUserName()
+
+	//wg.Wait()
 
 	fmt.Println("login to github success!")
 }
