@@ -28,19 +28,16 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+
 		const OS_TYPE = runtime.GOOS
-
 		var fileDir FileDirectory
-
 		var err error
-
 		fileDir.homeDir, err = os.UserHomeDir()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 		fileDir.distDir = ".ssh"
-
 		fileDir.sshKeyName = "id_rsa"
 
 		isConnecting := checkGithubConnection(fileDir)
@@ -51,9 +48,7 @@ to quickly create a Cobra application.`,
 		fmt.Println("login to github failed!")
 
 		// ssh-key create
-
 		fmt.Println("create ssh key")
-
 		CreateSshKey(OS_TYPE, fileDir)
 
 		// ask open setting page
