@@ -19,6 +19,8 @@ func CreateSshKey(OS_TYPE string, fileDir FileDirectory) {
 			os.Exit(1)
 		}
 		fmt.Println("ssh-key directory created")
+	} else {
+		fmt.Println("ssh-key directory already exist")
 	}
 
 	// check ssh-key exist
@@ -47,7 +49,7 @@ func CreateSshKey(OS_TYPE string, fileDir FileDirectory) {
 	}
 	fmt.Printf("You choose %s\n", out)
 	if out == "no" {
-		os.Exit(0)
+		return
 	}
 
 	//get ssh-key value
