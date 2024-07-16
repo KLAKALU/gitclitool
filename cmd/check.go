@@ -14,27 +14,35 @@ func checkGithubConnection(fileDir FileDirectory) bool {
 
 	// sshでぃれくとりが存在するか確認
 
-	//var wg sync.WaitGroup
+	var wg sync.WaitGroup
 
-	//wg.Add(1)
+	stopChan := make(chan struct{})
 
-	//go loadingAnimation(&wg)
+	wg.Add(1)
+
+	go loadingAnimation(stopChan, &wg)
 
 	knownHostsCheck(fileDir)
 
 	gettingGithubUserName()
 
-	//wg.Wait()
+	close(stopChan)
+	wg.Wait()
 	return true
 }
 
-func loadingAnimation(wg *sync.WaitGroup) {
+func loadingAnimation(stopChan chan struct{}, wg *sync.WaitGroup) {
+	defer wg.Done()
 	marks := []string{"   ", ".  ", ".. ", "..."}
 	for i := 0; i < 500; i++ {
-		fmt.Printf("\rconecting to github %s", marks[i%4])
-		time.Sleep(250 * time.Millisecond)
+		select {
+		case <-stopChan:
+			return
+		default:
+			fmt.Printf("\r%s", marks[i%4])
+			time.Sleep(250 * time.Millisecond)
+		}
 	}
-	wg.Done()
 }
 
 func knownHostsCheck(fileDir FileDirectory) {
@@ -84,7 +92,7 @@ func gettingGithubUserName() {
 			}
 			userName := strList[1]
 			userName = strings.Replace(userName, "!", "", 1)
-			fmt.Println("github username: " + userName)
+			fmt.Println("\rgithub username: " + userName)
 		} else {
 			fmt.Println("failed to get github username")
 		}
