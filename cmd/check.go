@@ -81,6 +81,9 @@ func gettingGithubUserName() {
 		if out != nil {
 			string := string(out)
 			strList := strings.Split(string, " ")
+			if strList[1] == "Permission" {
+				return
+			}
 			if strList[0] == "git@github.com:" {
 				fmt.Println("failed to connect to github")
 			}
