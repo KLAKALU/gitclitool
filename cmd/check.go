@@ -83,7 +83,6 @@ func gettingGithubUserName() {
 			strList := strings.Split(string, " ")
 			if strList[0] == "git@github.com:" {
 				fmt.Println("failed to connect to github")
-				os.Exit(1)
 			}
 			if strList[0] == "ssh:" {
 				fmt.Println("failed to connect to github")
