@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func checkGithubConnection(fileDir FileDirectory) {
+func checkGithubConnection(fileDir FileDirectory) bool {
 
 	// sshでぃれくとりが存在するか確認
 
@@ -25,8 +25,7 @@ func checkGithubConnection(fileDir FileDirectory) {
 	gettingGithubUserName()
 
 	//wg.Wait()
-
-	fmt.Println("login to github success!")
+	return true
 }
 
 func loadingAnimation(wg *sync.WaitGroup) {

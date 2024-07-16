@@ -43,41 +43,34 @@ to quickly create a Cobra application.`,
 
 		fileDir.sshKeyName = "id_rsa"
 
-		// ask what to do
+		isConnecting := checkGithubConnection(fileDir)
+		if isConnecting {
+			fmt.Println("login to github success!")
+			return
+		}
+		fmt.Println("login to github failed!")
+
+		// ssh-key create
+
+		fmt.Println("create ssh key")
+
+		CreateSshKey(OS_TYPE, fileDir)
+
+		// ask open setting page
 		prompt := promptui.Select{
-			Label: "what do you want to do?",
-			Items: []string{"check", "ssh-key create"},
+			Label: "Open setting page?",
+			Items: []string{"yes", "no"},
 		}
 		_, out, err := prompt.Run()
 		if err != nil {
 			fmt.Printf("Prompt failed %v\n", err)
 			os.Exit(1)
 		}
-		switch out {
-		case "check":
-			// check
-			checkGithubConnection(fileDir)
-		case "ssh-key create":
-			// ssh-key create
-
-			CreateSshKey(OS_TYPE, fileDir)
-
-			// ask open setting page
-			prompt := promptui.Select{
-				Label: "Open setting page?",
-				Items: []string{"yes", "no"},
-			}
-			_, out, err := prompt.Run()
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				os.Exit(1)
-			}
-			fmt.Printf("You choose %s\n", out)
-			if out == "no" {
-				os.Exit(0)
-			}
-			JumpToSettingPage(OS_TYPE)
+		fmt.Printf("You choose %s\n", out)
+		if out == "no" {
+			os.Exit(0)
 		}
+		JumpToSettingPage(OS_TYPE)
 	},
 }
 
