@@ -64,6 +64,15 @@ func makeKnownHosts(fileDir FileDirectory) {
 		fmt.Println("failed to make known_hosts list")
 		os.Exit(1)
 	}
+	if f, err := os.Stat(filepath.Join(fileDir.homeDir, fileDir.distDir, "known_hosts")); os.IsNotExist(err) || !f.IsDir() {
+		err := os.Mkdir(filepath.Join(fileDir.homeDir, fileDir.distDir), 0755)
+		if err != nil {
+			fmt.Println("failed to make .ssh directory")
+			os.Exit(1)
+		}
+
+	}
+
 	f, err := os.Create(filepath.Join(fileDir.homeDir, fileDir.distDir, "known_hosts"))
 	if err != nil {
 		fmt.Println("failed to make known_hosts file")
