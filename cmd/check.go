@@ -24,11 +24,11 @@ func checkGithubConnection(fileDir FileDirectory) bool {
 
 	knownHostsCheck(fileDir)
 
-	gettingGithubUserName()
+	isGithubConnection := gettingGithubUserName()
 
 	close(stopChan)
 	wg.Wait()
-	return true
+	return isGithubConnection
 }
 
 func loadingAnimation(stopChan chan struct{}, wg *sync.WaitGroup) {
@@ -83,7 +83,7 @@ func makeKnownHosts(fileDir FileDirectory) {
 	fmt.Println("Done")
 }
 
-func gettingGithubUserName() {
+func gettingGithubUserName() bool {
 	fmt.Println("get github username")
 	out, err := exec.Command("ssh", "-T", "git@github.com").CombinedOutput()
 	if err != nil {
@@ -91,7 +91,7 @@ func gettingGithubUserName() {
 			string := string(out)
 			strList := strings.Split(string, " ")
 			if strList[1] == "Permission" {
-				return
+				return false
 			}
 			if strList[0] == "git@github.com:" {
 				fmt.Println("failed to connect to github")
@@ -104,10 +104,13 @@ func gettingGithubUserName() {
 			userName := strList[1]
 			userName = strings.Replace(userName, "!", "", 1)
 			fmt.Println("\rgithub username: " + userName)
+			return true
 		} else {
 			fmt.Println("failed to get github username")
+			return false
 		}
 	} else {
 		fmt.Println("failed to get github username")
+		return false
 	}
 }
