@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func JumpToSettingPage(OS_TYPE string) {
+func openSettingPage(OS_TYPE string) {
 	const SETTING_PAGE_URL = "https://github.com/settings/ssh/new"
 
 	// open setting page

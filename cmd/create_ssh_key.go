@@ -9,7 +9,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func CreateSshKey(OS_TYPE string, fileDir FileDirectory) {
+func CreateSshKeyFile(OS_TYPE string, fileDir FileDirectory) {
 
 	// check ssh directory exist
 	if _, err := os.Stat(filepath.Join(fileDir.homeDir, fileDir.distDir)); os.IsNotExist(err) {

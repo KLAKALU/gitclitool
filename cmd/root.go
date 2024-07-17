@@ -49,7 +49,7 @@ to quickly create a Cobra application.`,
 
 		// ssh-key create
 		fmt.Println("create ssh key")
-		CreateSshKey(OS_TYPE, fileDir)
+		CreateSshKeyFile(OS_TYPE, fileDir)
 
 		// ask open setting page
 		prompt := promptui.Select{
@@ -65,7 +65,7 @@ to quickly create a Cobra application.`,
 		if out == "no" {
 			os.Exit(0)
 		}
-		JumpToSettingPage(OS_TYPE)
+		openSettingPage(OS_TYPE)
 	},
 }
 

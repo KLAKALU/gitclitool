@@ -20,18 +20,18 @@ func checkGithubConnection(fileDir FileDirectory) bool {
 
 	wg.Add(1)
 
-	go loadingAnimation(stopChan, &wg)
+	go showLoadingAnimation(stopChan, &wg)
 
-	knownHostsCheck(fileDir)
+	checkKnownHostsExist(fileDir)
 
-	isGithubConnection := gettingGithubUserName()
+	isGithubConnection := fetchGithubUserName()
 
 	close(stopChan)
 	wg.Wait()
 	return isGithubConnection
 }
 
-func loadingAnimation(stopChan chan struct{}, wg *sync.WaitGroup) {
+func showLoadingAnimation(stopChan chan struct{}, wg *sync.WaitGroup) {
 	defer wg.Done()
 	marks := []string{"   ", ".  ", ".. ", "..."}
 	for i := 0; i < 500; i++ {
@@ -45,19 +45,19 @@ func loadingAnimation(stopChan chan struct{}, wg *sync.WaitGroup) {
 	}
 }
 
-func knownHostsCheck(fileDir FileDirectory) {
+func checkKnownHostsExist(fileDir FileDirectory) {
 	fmt.Println("check known_hosts")
 	// check known_hosts exist
 	if _, err := os.Stat(filepath.Join(fileDir.homeDir, fileDir.distDir, "known_hosts")); os.IsNotExist(err) {
 		// ~/.ssh/known_hosts file not exist
-		makeKnownHosts(fileDir)
+		makeKnownHostsFile(fileDir)
 	} else {
 		// ~/.ssh/known_hosts file exist
 		fmt.Println("Done")
 	}
 }
 
-func makeKnownHosts(fileDir FileDirectory) {
+func makeKnownHostsFile(fileDir FileDirectory) {
 	fmt.Println("make known_hosts")
 	out, err := exec.Command("ssh-keyscan", "github.com").CombinedOutput()
 	if err != nil {
@@ -83,7 +83,7 @@ func makeKnownHosts(fileDir FileDirectory) {
 	fmt.Println("Done")
 }
 
-func gettingGithubUserName() bool {
+func fetchGithubUserName() bool {
 	fmt.Println("get github username")
 	out, err := exec.Command("ssh", "-T", "git@github.com").CombinedOutput()
 	if err != nil {
