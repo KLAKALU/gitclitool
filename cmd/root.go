@@ -40,8 +40,8 @@ to quickly create a Cobra application.`,
 		fileDir.distDir = ".ssh"
 		fileDir.sshKeyName = "id_rsa"
 
-		isConnecting := checkGithubConnection(fileDir)
-		if isConnecting {
+		isConnectArrow := checkGithubConnection(fileDir)
+		if isConnectArrow {
 			fmt.Println("login to github success!")
 			return
 		}
@@ -62,10 +62,12 @@ to quickly create a Cobra application.`,
 			os.Exit(1)
 		}
 		fmt.Printf("You choose %s\n", out)
-		if out == "no" {
+		if out == "Yes" {
+			openSettingPage(OS_TYPE)
+		} else {
 			os.Exit(0)
 		}
-		openSettingPage(OS_TYPE)
+
 	},
 }
 
